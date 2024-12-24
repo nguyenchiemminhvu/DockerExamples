@@ -1,18 +1,13 @@
-FROM ubuntu:latest
+FROM ubuntu
 WORKDIR /workspace
 
-RUN apt -y update
-RUN apt -y install build-essential cmake libboost-all-dev libcurl4-openssl-dev git
+RUN apt -y update && apt -y install build-essential cmake git net-tools
 
-ADD git@github.com:nguyenchiemminhvu/LinuxNetworkProgramming.git /workspace/
+COPY my_http_server /workspace/my_http_server
 
-RUN mkdir -p 01_networking_libraries/my_http_server/build && \
-    cd 01_networking_libraries/my_http_server/build && \
-    cmake .. && \
-    make
+# Ensure CMake finds the CMakeLists.txt
+RUN mkdir -p my_http_server/build && cd my_http_server/build && cmake .. && make
 
 EXPOSE 8080
 
-CMD [ "echo", "Hello! Your docker container is fully configured and ready to use" ]
-
-ENTRYPOINT ["/workspace/01_networking_libraries/my_http_server/build/HTTPServer", "8080"]
+CMD ["/workspace/my_http_server/build/HTTPServer", "8080"]
