@@ -1,7 +1,7 @@
 FROM ubuntu
 WORKDIR /workspace
 
-RUN apt -y update && apt -y install build-essential cmake git net-tools
+RUN apt -y update && apt -y install build-essential cmake git net-tools curl
 
 COPY my_http_server /workspace/my_http_server
 

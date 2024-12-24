@@ -12,11 +12,12 @@ HTTPResponse HTTPRouter::route(const HTTPRequest& request)
 {
     HTTPResponse response;
 
-    std::string path = std::string(STR_HTTP_ROOT_PATH) + request.m_path;
+    std::string path = std::experimental::filesystem::current_path().string() + "/" + std::string(STR_HTTP_ROOT_PATH) + request.m_path;
+    LOGI(path);
     if (!std::experimental::filesystem::exists(path) || !std::experimental::filesystem::is_directory(path))
     {
         LOGE("Path is not found");
-        path = std::string(STR_HTTP_ROOT_PATH) + std::string("/404");
+        path = std::experimental::filesystem::current_path().string() + "/" + std::string(STR_HTTP_ROOT_PATH) + std::string("/404");
         response.set_status(HTTP_404);
     }
     else
@@ -25,7 +26,7 @@ HTTPResponse HTTPRouter::route(const HTTPRequest& request)
     }
 
 
-    std::string filename = path + STR_HTTP_MAIN_PAGE;
+    std::string filename = path + "/" + STR_HTTP_MAIN_PAGE;
     std::fstream file(filename, std::ios::in);
     if (file.is_open())
     {
